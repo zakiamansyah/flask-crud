@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, flash, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -42,16 +42,22 @@ def index():
 
 @app.route('/inputData', methods=['GET', 'POST'])
 def inputData():
+    #jika methode post yang terpenuhi maka langsung ke proses request data dari field dalam table database
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         telp = request.form['telp']
         address = request.form['address']
         
+        #proses input datanya ke table database
         input_data = Employes(name, email, telp, address)
         
+        #db.session.add(variable input data) -> berfungsi sebagai INSERT untuk database 
         db.session.add(input_data)
+        #db.session.commit() -> setiap melakukan INSERT di sqlalchemy selalu harus memanggil commit agar proses insert bisa terupdate
         db.session.commit()
+        
+        flash("Input Data Success")
         
         return redirect(url_for('index'))
     
