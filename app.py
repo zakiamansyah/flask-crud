@@ -2,10 +2,12 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key = "asdijqidkanasdawdsdsdwasqwddandiqnwwdia"
+#setiap menggunakan sqlalchemy inisialisasi secret key dari random str
+app.secret_key = "E0wf9V5EK+0zO3QXuH7iKiAakj2ZndhMRKj7i+AbK+E="
 
 #membuat koneksi ke server db kita
-userpass = "mysql+pymysql://root:1122"
+#setiap akhiran dari password dikasih @
+userpass = "mysql+pymysql://root:1122@"
 basedir = "127.0.0.1"
 dbname = "/company"
 
@@ -18,7 +20,7 @@ db = SQLAlchemy(app)
 
 #ini ngebuat modelnya interaksi dari tabel di database
 #harus diperhatikan nama classnya harus sama percis dangan table besar kecil hurufnya
-class employes(db.Model):
+class Employes(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
@@ -26,15 +28,16 @@ class employes(db.Model):
     address = db.Column(db.String(255), nullable=False)
     
     #inisialisasi penggunaan table menjadi variable
-    def __ini__(self, name, email, telp, address):
+    def __init__(self, name, email, telp, address):
         self.name = name
         self.email = email
         self.telp = telp
         self.address = address
-
+    
 @app.route('/')
 def index():
-    data_employes = db.session.query(employes)
+    #db.session.query(nama_class_dari_table_di_database) -> fungsinya untuk get datanya
+    data_employes = db.session.query(Employes)
     return render_template('index.html', data=data_employes)
 
 @app.route('/inputData', methods=['GET', 'POST'])
@@ -45,7 +48,7 @@ def inputData():
         telp = request.form['telp']
         address = request.form['address']
         
-        input_data = employes(name, email, telp, address)
+        input_data = Employes(name, email, telp, address)
         
         db.session.add(input_data)
         db.session.commit()
