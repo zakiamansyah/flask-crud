@@ -30,6 +30,7 @@
             </tr>
         </thead>
         <tbody>
+            <!-- ini semacam foreach di templating JINJA FLASK -->
             {% for employe in data %}
                 <tr>
                     <th scope="row">{{ loop.index }}</th>
@@ -38,8 +39,8 @@
                     <td>{{ employe.telp }}</td>
                     <td>{{ employe.address }}</td>
                     <td>
-                        <a href="{{ url_for('edit_data', id=employe.id) }}" class="btn btn-warning">Edit</a>
-                        <a href="{{ url_for('delete', id=employe.id) }}" class="btn btn-danger" onclick="return confirm('Are you sure delete this data?')">Delete</a>
+                        <a href="" class="btn btn-warning">Edit</a>
+                        <a href="" class="btn btn-danger" onclick="return confirm('Are you sure delete this data?')">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
