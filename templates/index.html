@@ -5,7 +5,7 @@
 {% block header %} Table Data {% endblock %}
 
 {% block body %}
-    <a href="{{ url_for('input_data') }}" class="btn btn-primary" style="margin-bottom: 1.3rem;">Input Data</a>
+    <a href="{{ url_for('inputData') }}" class="btn btn-primary" style="margin-bottom: 1.3rem;">Input Data</a>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
