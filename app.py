@@ -62,3 +62,24 @@ def inputData():
         return redirect(url_for('index'))
     
     return render_template('inputData.html')
+
+#inisialisasi parameter di routenya pake gituan
+@app.route('/edit/<int:id>')
+def getDataEdit(id):
+    data_employes = Employes.query.get(id)
+    return render_template('editData.html', data=data_employes)
+
+@app.route('/postEdit', methods=['POST', 'GET'])
+def postDataEdit():
+    data_employes = Employes.query.get(request.form.get('id'))
+    
+    data_employes.name = request.form['name']
+    data_employes.email = request.form['email']
+    data_employes.telp = request.form['telp']
+    data_employes.address = request.form['address']
+    
+    db.session.commit()
+    
+    flash('Edit Data Success')
+    
+    return redirect(url_for('index'))
