@@ -83,3 +83,13 @@ def postDataEdit():
     flash('Edit Data Success')
     
     return redirect(url_for('index'))
+
+@app.route('/deleteData/<int:id>')
+def deleteData(id):
+    data_employe = Employes.query.get(id)
+    db.session.delete(data_employe)
+    db.session.commit()
+
+    flash('Delete Data Success')
+
+    return redirect(url_for('index'))
