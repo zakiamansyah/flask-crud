@@ -5,29 +5,28 @@
 {% block header %} Login Authentication {% endblock %}
 
 {% block body %}
-<div class="login">
-    {% with msg = get_flashed_messages() %}
-        {% if msg %}
-            {% for message in msg %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Success!</strong> {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+{% with msg = get_flashed_messages() %}
+    {% if msg %}
+        {% for message in msg %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error !</strong> {{ message }}
+                <button type="button" class="btn-close" aria-label="Close">
+                </button>
+            </div>
             {% endfor %}
-        {% endif %}
-    {% endwith %}
+    {% endif %}
+{% endwith %}
+<div class="login">
     <h1>Login</h1>
     <div class="links">
         <a href="{{ url_for('login') }}" class="active">Login</a>
         <a href="{{ url_for('register') }}">Register</a>
     </div>
     <form action="{{ url_for('login') }}" method="post">
-        <label for="username">
-            <i class="fas fa-user"></i>
+        <label for="email">
+            <i class="far fa-envelope"></i>
         </label>
-        <input type="text" name="username" placeholder="Username" id="username" required>
+        <input type="text" name="email" placeholder="Email" id="email" required>
         <label for="password">
             <i class="fas fa-lock"></i>
         </label>

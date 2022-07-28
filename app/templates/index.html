@@ -6,6 +6,11 @@
 
 {% block body %}
     <a href="{{ url_for('inputData') }}" class="btn btn-primary" style="margin-bottom: 1.3rem;">Input Data</a>
+    <div>
+        
+    </div>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger" style="width: 100px;padding: 5px 10px;margin:5px;">Logout</a>
+    
     {% with msg = get_flashed_messages() %}
         {% if msg %}
             {% for message in msg %}

@@ -5,6 +5,18 @@
 {% block header %} Register Account {% endblock %}
 
 {% block body %}
+{% with msg = get_flashed_messages() %}
+    {% if msg %}
+        {% for message in msg %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong> {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+    {% endif %}
+{% endwith %}
 <div class="register">
     <h1>Register</h1>
     <div class="links">
@@ -19,12 +31,12 @@
         <label for="password">
             <i class="fas fa-lock"></i>
         </label>
-        <input type="password" name="password" placeholder="Password" id="password" required>
+        <input type="email" name="email" placeholder="Email" id="email" required>
+            <div class="msg">{{ msg }}</div>
         <label for="email">
             <i class="fas fa-envelope"></i>
         </label>
-        <input type="email" name="email" placeholder="Email" id="email" required>
-        <div class="msg">{{ msg }}</div>
+        <input type="password" name="password" placeholder="Password" id="password" required>
         <input type="submit" value="Register">
     </form>
 </div>
