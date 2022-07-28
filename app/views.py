@@ -1,20 +1,16 @@
 from app import app, db
 from app.models import Users, Employes
-from flask import flash, render_template, redirect, url_for, request, session
+from flask import flash, render_template, redirect, url_for, request, session, jsonify
 
 @app.route('/')
 def index():
-    if 'email' in session:
+    if 'users' in session.keys():
         #db.session.query(nama_class_dari_table_di_database) -> fungsinya untuk get datanya
         data_employes = db.session.query(Employes)
         return render_template('index.html', data=data_employes)
     else:
-        return redirect(url_for('login'))
+        return render_template('login.html')
     
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -28,13 +24,32 @@ def register():
         
         flash("Success Register Account")
         
-        return redirect(url_for('index'))
-    
     return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "POST":
+        
+        form = request.form
+        users = Users.query.filter_by(email=form['email']).first()
+
+        if users and users.check_password(form['password']):
+            session['users'] = users.id
+            return redirect(url_for('index'))
+        else:
+            flash("Password was incorrect or user doesn't exist.")
+            return redirect(url_for('login'))
+        
+    return render_template('login.html')
+
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    session.pop('users', None)
+    return redirect(url_for('index'))
 
 @app.route('/inputData', methods=['GET', 'POST'])
 def inputData():
-    if 'email' in session:
+    if 'users' in session.keys():
         #jika methode post yang terpenuhi maka langsung ke proses request data dari field dalam table database
         if request.method == 'POST':
             name = request.form['name']
@@ -56,24 +71,23 @@ def inputData():
         
         return render_template('inputData.html')
     else:
-        return redirect(url_for('login'))
-    
+        return render_template('login.html')
 
 #inisialisasi parameter di routenya pake gituan
 @app.route('/edit/<int:id>')
 def getDataEdit(id):
-    if 'email' in session:
+    if 'users' in session.keys():
         data_employes = Employes.query.get(id)
         
         return render_template('editData.html', data=data_employes)
     else:
-        return redirect(url_for('login'))
-
+        return render_template('login.html')
+    
 @app.route('/postEdit', methods=['POST', 'GET'])
 def postDataEdit():
-    if 'email' in session:
+    if 'users' in session.keys():
         data_employes = Employes.query.get(request.form.get('id'))
-    
+
         data_employes.name = request.form['name']
         data_employes.email = request.form['email']
         data_employes.telp = request.form['telp']
@@ -85,11 +99,11 @@ def postDataEdit():
         
         return redirect(url_for('index'))
     else:
-        return redirect(url_for('login'))
+        return render_template('login.html')    
     
 @app.route('/deleteData/<int:id>')
 def deleteData(id):
-    if 'email' in session:
+    if 'users' in session.keys():
         data_employe = Employes.query.get(id)
         db.session.delete(data_employe)
         db.session.commit()
@@ -98,4 +112,4 @@ def deleteData(id):
 
         return redirect(url_for('index'))
     else:
-        return redirect(url_for('login'))
+        return render_template('login.html')
